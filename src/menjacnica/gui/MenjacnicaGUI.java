@@ -9,6 +9,8 @@ import javax.swing.JScrollPane;
 import java.awt.CardLayout;
 import javax.swing.JTable;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.FlowLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -19,8 +21,13 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+
+import java.io.File;
+
 import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -32,6 +39,10 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MenjacnicaGUI {
 
@@ -50,6 +61,7 @@ public class MenjacnicaGUI {
 	
 	DefaultTableModel model;
 	Object[][] vrednosti = new Object[10][6];
+	File file;
 	private JPopupMenu popupMenu;
 	private JMenuItem mntmDodajKurs;
 	private JMenuItem mntmObrisiKurs;
@@ -62,6 +74,7 @@ public class MenjacnicaGUI {
 	private JMenuItem mntmExit;
 	private JMenuItem mntmNewMenuItem;
 	private JSeparator separator;
+
 
 	/**
 	 * Launch the application.
@@ -91,6 +104,12 @@ public class MenjacnicaGUI {
 	 */
 	private void initialize() {
 		frmMenjacnica = new JFrame();
+		frmMenjacnica.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				izlaz();
+			}
+		});
 		frmMenjacnica.setIconImage(Toolkit.getDefaultToolkit().getImage(MenjacnicaGUI.class.getResource("/ikonice/gui/dollar-sign-temporary-tattoo_gen2-9.jpg")));
 		frmMenjacnica.setTitle("Menjacnica");
 		frmMenjacnica.setBounds(100, 100, 450, 300);
@@ -195,7 +214,7 @@ public class MenjacnicaGUI {
 	private JTextArea getTextArea() {
 		if (textArea == null) {
 			textArea = new JTextArea();
-			textArea.setPreferredSize(new Dimension(4, 30));
+			textArea.setPreferredSize(new Dimension(4, 35));
 		}
 		return textArea;
 	}
@@ -271,22 +290,45 @@ public class MenjacnicaGUI {
 	private JMenuItem getMenuItem_1() {
 		if (mntmOpen == null) {
 			mntmOpen = new JMenuItem("Open");
+			mntmOpen.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/javax/swing/plaf/metal/icons/ocean/directory.gif")));
+			mntmOpen.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					JFileChooser fc = new JFileChooser();
+					int returnVal = fc.showOpenDialog(frmMenjacnica);
+					if (returnVal == JFileChooser.APPROVE_OPTION)
+						file = fc.getSelectedFile();
+					textArea.append("\nUcitan fajl: " + file.getPath());
+				}
+			});
 			mntmOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
-			mntmOpen.setSelectedIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/javax/swing/plaf/metal/icons/ocean/directory.gif")));
 		}
 		return mntmOpen;
 	}
 	private JMenuItem getMenuItem_2() {
 		if (mntmSave == null) {
 			mntmSave = new JMenuItem("Save");
+			mntmSave.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					JFileChooser fc = new JFileChooser();
+					int returnVal = fc.showSaveDialog(frmMenjacnica);
+					if (returnVal == JFileChooser.APPROVE_OPTION)
+					 file = fc.getSelectedFile();
+					textArea.append("\nSacuvan fajl: " + file.getPath());
+				}
+			});
+			mntmSave.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/javax/swing/plaf/metal/icons/ocean/floppy.gif")));
 			mntmSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-			mntmSave.setSelectedIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/javax/swing/plaf/metal/icons/ocean/floppy.gif")));
 		}
 		return mntmSave;
 	}
 	private JMenuItem getMenuItem_3() {
 		if (mntmExit == null) {
 			mntmExit = new JMenuItem("Exit");
+			mntmExit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					izlaz();
+				}
+			});
 			mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_MASK));
 			mntmExit.setSelectedIcon(null);
 		}
@@ -295,6 +337,13 @@ public class MenjacnicaGUI {
 	private JMenuItem getMenuItem_4() {
 		if (mntmNewMenuItem == null) {
 			mntmNewMenuItem = new JMenuItem("About");
+			mntmNewMenuItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null, "Autor: Mila Dikic"
+							+ "\nFON, april 2018", "O autoru",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+			});
 		}
 		return mntmNewMenuItem;
 	}
@@ -303,5 +352,11 @@ public class MenjacnicaGUI {
 			separator = new JSeparator();
 		}
 		return separator;
+	}
+	private void izlaz() {
+		int opt = JOptionPane.showConfirmDialog(null, "Da li zaista zelite da izadjete?",
+				"Izlaz", JOptionPane.YES_NO_CANCEL_OPTION);
+		if (opt == JOptionPane.YES_OPTION)
+			System.exit(0);
 	}
 }
