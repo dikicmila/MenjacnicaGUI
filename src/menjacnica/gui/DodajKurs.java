@@ -178,12 +178,13 @@ public class DodajKurs {
 			btnNewButton = new JButton("Dodaj");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					glavni.ispisi("Sifra valute: " + textField_1.getText() 
+					glavni.ispisi("DODAT KURS: [Sifra valute: " + textField_1.getText() 
 											+ " Naziv valute: " + textField.getText()
 											+ " Prodajni kurs: " + textField_2.getText()
 											+ " Kupovni kurs: " + textField_3.getText()
 											+ " Srednji kurs: " + textField_4.getText()
-											+ " Skraceni naziv: \n" + textField_5.getText());
+											+ " Skraceni naziv: " + textField_5.getText() + "]" 
+											+ System.lineSeparator());
 					frmDodajKurs.dispose();
 				}
 			});

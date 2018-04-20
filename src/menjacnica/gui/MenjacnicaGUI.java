@@ -207,6 +207,12 @@ public class MenjacnicaGUI {
 	private JButton getBtnNewButton_2() {
 		if (btnNewButton_2 == null) {
 			btnNewButton_2 = new JButton("Obrisi kurs");
+			btnNewButton_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ObrisiKurs ok = new ObrisiKurs(glavni);
+					ok.frmObrisiKurs.setVisible(true);
+				}
+			});
 			btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 11));
 			btnNewButton_2.setPreferredSize(new Dimension(120, 23));
 		}
