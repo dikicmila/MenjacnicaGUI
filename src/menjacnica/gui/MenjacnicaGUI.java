@@ -115,7 +115,7 @@ public class MenjacnicaGUI {
 		frmMenjacnica.setIconImage(Toolkit.getDefaultToolkit().getImage(MenjacnicaGUI.class.getResource("/ikonice/gui/dollar-sign-temporary-tattoo_gen2-9.jpg")));
 		frmMenjacnica.setTitle("Menjacnica");
 		frmMenjacnica.setBounds(100, 100, 450, 300);
-		frmMenjacnica.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmMenjacnica.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frmMenjacnica.getContentPane().setLayout(new BorderLayout(0, 0));
 		frmMenjacnica.getContentPane().add(getPanel(), BorderLayout.CENTER);
 		frmMenjacnica.getContentPane().add(getMenuBar(), BorderLayout.NORTH);
@@ -199,6 +199,12 @@ public class MenjacnicaGUI {
 	private JButton getBtnNewButton_1() {
 		if (btnNewButton_1 == null) {
 			btnNewButton_1 = new JButton("Izvrsi zamenu");
+			btnNewButton_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					IzvrsiZamenu iz = new IzvrsiZamenu(glavni);
+					iz.frmIzvrsiZamenu.setVisible(true);
+				}
+			});
 			btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 			btnNewButton_1.setPreferredSize(new Dimension(120, 23));
 		}
@@ -243,12 +249,24 @@ public class MenjacnicaGUI {
 	private JMenuItem getMntmObrisiKurs() {
 		if (mntmObrisiKurs == null) {
 			mntmObrisiKurs = new JMenuItem("Obrisi kurs");
+			mntmObrisiKurs.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ObrisiKurs ok = new ObrisiKurs(glavni);
+					ok.frmObrisiKurs.setVisible(true);
+				}
+			});
 		}
 		return mntmObrisiKurs;
 	}
 	private JMenuItem getMntmIzvrsiZamenu() {
 		if (mntmIzvrsiZamenu == null) {
 			mntmIzvrsiZamenu = new JMenuItem("Izvrsi zamenu");
+			mntmIzvrsiZamenu.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					IzvrsiZamenu iz = new IzvrsiZamenu(glavni);
+					iz.frmIzvrsiZamenu.setVisible(true);
+				}
+			});
 		}
 		return mntmIzvrsiZamenu;
 	}
