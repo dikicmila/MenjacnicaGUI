@@ -46,7 +46,7 @@ import java.awt.event.WindowEvent;
 
 public class MenjacnicaGUI {
 
-	private JFrame frmMenjacnica;
+	public JFrame frmMenjacnica;
 	private JPanel panel;
 	private JPanel panel_1;
 	private JPanel panel_2;
@@ -56,8 +56,6 @@ public class MenjacnicaGUI {
 	private JButton btnNewButton;
 	private JButton btnNewButton_1;
 	private JButton btnNewButton_2;
-	private JScrollPane scrollPane_1;
-	private JTextArea textArea;
 	
 	DefaultTableModel model;
 	Object[][] vrednosti = new Object[10][6];
@@ -75,6 +73,9 @@ public class MenjacnicaGUI {
 	private JMenuItem mntmNewMenuItem;
 	private JSeparator separator;
 
+	private MenjacnicaGUI glavni;
+	private JScrollPane scrollPane_1;
+	private JTextArea textArea;
 
 	/**
 	 * Launch the application.
@@ -97,6 +98,7 @@ public class MenjacnicaGUI {
 	 */
 	public MenjacnicaGUI() {
 		initialize();
+		this.glavni = this;
 	}
 
 	/**
@@ -117,7 +119,6 @@ public class MenjacnicaGUI {
 		frmMenjacnica.getContentPane().setLayout(new BorderLayout(0, 0));
 		frmMenjacnica.getContentPane().add(getPanel(), BorderLayout.CENTER);
 		frmMenjacnica.getContentPane().add(getMenuBar(), BorderLayout.NORTH);
-		
 	}
 
 	private JPanel getPanel() {
@@ -153,10 +154,11 @@ public class MenjacnicaGUI {
 	private JPanel getPanel_3() {
 		if (panel_3 == null) {
 			panel_3 = new JPanel();
+			panel_3.setAutoscrolls(true);
 			panel_3.setBorder(new TitledBorder(null, "STATUS", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 			panel_3.setLayout(new BorderLayout(0, 0));
-			panel_3.add(getScrollPane_1());
-			panel_3.add(getTextArea());
+			panel_3.add(getScrollPane_1(), BorderLayout.NORTH);
+			panel_3.add(getTextArea_1(), BorderLayout.SOUTH);
 		}
 		return panel_3;
 	}
@@ -183,6 +185,12 @@ public class MenjacnicaGUI {
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("Dodaj kurs");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					DodajKurs dk = new DodajKurs(glavni);
+					dk.frmDodajKurs.setVisible(true);
+				}
+			});
 			btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 11));
 			btnNewButton.setPreferredSize(new Dimension(120, 23));
 		}
@@ -204,20 +212,7 @@ public class MenjacnicaGUI {
 		}
 		return btnNewButton_2;
 	}
-	private JScrollPane getScrollPane_1() {
-		if (scrollPane_1 == null) {
-			scrollPane_1 = new JScrollPane();
-			scrollPane_1.setAutoscrolls(true);
-		}
-		return scrollPane_1;
-	}
-	private JTextArea getTextArea() {
-		if (textArea == null) {
-			textArea = new JTextArea();
-			textArea.setPreferredSize(new Dimension(4, 35));
-		}
-		return textArea;
-	}
+
 	private JPopupMenu getPopupMenu() {
 		if (popupMenu == null) {
 			popupMenu = new JPopupMenu();
@@ -230,6 +225,12 @@ public class MenjacnicaGUI {
 	private JMenuItem getMntmDodajKurs() {
 		if (mntmDodajKurs == null) {
 			mntmDodajKurs = new JMenuItem("Dodaj kurs");
+			mntmDodajKurs.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					DodajKurs dk = new DodajKurs(glavni);
+					dk.frmDodajKurs.setVisible(true);
+				}
+			});
 		}
 		return mntmDodajKurs;
 	}
@@ -297,7 +298,7 @@ public class MenjacnicaGUI {
 					int returnVal = fc.showOpenDialog(frmMenjacnica);
 					if (returnVal == JFileChooser.APPROVE_OPTION)
 						file = fc.getSelectedFile();
-					textArea.append("\nUcitan fajl: " + file.getPath());
+					ispisi("\nUcitan fajl: " + file.getPath());
 				}
 			});
 			mntmOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
@@ -313,7 +314,7 @@ public class MenjacnicaGUI {
 					int returnVal = fc.showSaveDialog(frmMenjacnica);
 					if (returnVal == JFileChooser.APPROVE_OPTION)
 					 file = fc.getSelectedFile();
-					textArea.append("\nSacuvan fajl: " + file.getPath());
+					ispisi("\nSacuvan fajl: " + file.getPath());
 				}
 			});
 			mntmSave.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/javax/swing/plaf/metal/icons/ocean/floppy.gif")));
@@ -358,5 +359,21 @@ public class MenjacnicaGUI {
 				"Izlaz", JOptionPane.YES_NO_CANCEL_OPTION);
 		if (opt == JOptionPane.YES_OPTION)
 			System.exit(0);
+	}
+	public void ispisi(String tekst) {
+		textArea.append(tekst);
+	}
+	private JScrollPane getScrollPane_1() {
+		if (scrollPane_1 == null) {
+			scrollPane_1 = new JScrollPane(textArea);
+			scrollPane_1.setAutoscrolls(true);
+		}
+		return scrollPane_1;
+	}
+	private JTextArea getTextArea_1() {
+		if (textArea == null) {
+			textArea = new JTextArea();
+		}
+		return textArea;
 	}
 }
